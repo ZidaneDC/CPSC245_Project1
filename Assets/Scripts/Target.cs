@@ -28,15 +28,19 @@ public class Target : MonoBehaviour
         
     }
 
-    public void Hit(Target hitTarget) //Method that handles what happens when a target is hit, pass in a target object to access its variables
-    {
-        
-    }
+    //Targets will register when they've been hit individually, then pass that info into level logic which will update the score and handle bomb target behaviour
+    //this will be done using OnMouseDown instead of the Hit method below
 
-    public void DestroyAll() //Method called if the hit target is an bomb, will destroy all other targets onscreen
-    {
+    //public void Hit(Target hitTarget) 
+    ////Method that handles what happens when a target is hit, pass in a target object to access its variables
+    //{
+    //    if (hitTarget.isBomb == true) //if the target is a bomb, call destroy all method
+    //    {
+    //        DestroyAll();
+    //    }
+    //}
 
-    }
+   
     // Update is called once per frame
     void Update() //update method should like control how the target moves once it is spawned, and when it despawns if it isn't hit
     {
