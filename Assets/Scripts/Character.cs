@@ -4,41 +4,42 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public Collider dragonCollider;
+    public GameObject dragon;
+    public Rigidbody dragonRigidbody;
     private int charaacterHappiness;
     private int characterEnergy;
+    private float thrust = 0.1f;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"):
+        if (Input.GetKeyDown(KeyCode.Mouse0))
             shootFire();
-
+        if (Input.GetKeyDown(KeyCode.W))
+            jump();
+        if (Input.GetKeyDown(KeyCode.S))
+            duck();
     }
 
     private void shootFire()
     {
-        void OnMouseOver()
-        {
-            //Target.Hit();
-        }
+       //animation trigger
     }
 
     private void jump()
     {
-        //button press for jump
         //character moves a certain height up
+        dragon.transform.position = new Vector3(transform.position.x, 3, transform.position.z);
     }
 
     private void duck()
     {
-        //button press for duck
-        //character has duck animation
+        //character moving a certain height down
     }
 }
