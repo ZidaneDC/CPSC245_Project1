@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +9,16 @@ public class Character : MonoBehaviour
     public Rigidbody dragonRigidbody;
     private int charaacterHappiness;
     private int characterEnergy;
-    private float thrust = 0.1f;
+    private float thrust = 300f;
+    private Vector3 smallScale;
+    private Vector3 bigScale;
+    private float sizeTimer = .1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        smallScale = new Vector3(1f, 0.5f, 1f);
+        bigScale = new Vector3(1f, 1f, 1f);
     }
 
     // Update is called once per frame
@@ -34,12 +39,29 @@ public class Character : MonoBehaviour
 
     private void jump()
     {
-        //character moves a certain height up
-        dragon.transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+        //character moves up with a certain amount of force
+        //dragon.transform.position = new Vector3(transform.position.x, 3, transform.position.z);
+
+        dragonRigidbody.AddForce(Vector3.up * thrust);
     }
 
     private void duck()
     {
         //character moving a certain height down
+        dragon.transform.position = new Vector3(transform.position.x, 0.35f, transform.position.z);
+        dragon.transform.localScale = smallScale;
+        waitForNormalSize();
+    }
+
+    private IEnumerator waitForNormalSize()
+    {
+        yield return new WaitForSeconds(sizeTimer);
+        GoToNormalSize();
+    }
+
+    private void GoToNormalSize()
+    {
+        dragon.transform.position = new Vector3(transform.position.x, 0.58f, transform.position.z);
+        dragon.transform.localScale = bigScale;
     }
 }
