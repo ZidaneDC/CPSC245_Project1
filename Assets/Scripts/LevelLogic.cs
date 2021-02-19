@@ -27,7 +27,19 @@ public class LevelLogic : MonoBehaviour
 
     }
 
-    //level setup method? or just a constructor? decide which works better, considering that game logic determines some level info
+    //pararameterized constructor
+    //odds for target spawns, number of targets needed to hit for the level, and target movement speeds and spawn rate are determined by game logic and passed in
+    public LevelLogic(string inputColor, int inputGoal, double inputChance, float inputTimer)
+    {
+        objectiveColor = inputColor;
+        objectiveGoal = inputGoal;
+        objectiveChance = inputChance;
+        targetTimer = inputTimer;
+        levelScore = 0;
+        scoreMultiplier = 1;
+        objectiveCount = 0;
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +48,7 @@ public class LevelLogic : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() //call the level complete check, as well as the methods for spawning targets
+    void Update() //call the level complete check, as well as the methods for spawning targets, and add level score to the total score
     {
         if(objectiveCount == objectiveGoal)
         {
@@ -70,13 +82,13 @@ public class LevelLogic : MonoBehaviour
 
     //Method called if the hit target is an bomb, will destroy all other targets onscreen and player's score will increase accordingly
     //figure out how to get all of the targets currently onscreen
+    //using pooling, you can look at all active objects and turn them off instead of destroying them
     public void DestroyAll()
     {
 
     }
 
    //check for level complete method to end level when objective is reached
-   //should their be a marker that changes to true when an objective has been reached and activates this method?
    //stops the level (maybe similar to pause) and shows the end of level ui
    public void LevelComplete()
     {
@@ -86,10 +98,10 @@ public class LevelLogic : MonoBehaviour
     //another method to spawn targets depending on the level's set rate of probability and rate of spawn, will also control spawned target's speed
     //how will target speed be done? will it be set through the entire level? or be from a certain range each level
     //also how many targets will spawn at once? probably will be picked from a random number from 2-5 ish that adjusts depending on level or game logic
+    //use pooling to control targets, won't need a destroy/despawn method if you do this
     public void SpawnTarget() //should this have parameters? will this be called every time you want to call targets at a certain time parameter or will it run constantly?
     {
 
     }
 
-    //will level or game logic how and when targets despawn? if its level there needs to be a method for it and a parameter that causes targets to despawn
 }

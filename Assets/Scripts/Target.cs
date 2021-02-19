@@ -10,6 +10,7 @@ public class Target : MonoBehaviour
     public int targetValue;
     public bool isBomb; //
     public bool isHit; //variable controlling target's appearance after being hit
+    public LevelLogic levelLogic; 
 
     //default constructor 
     public Target()
@@ -33,6 +34,7 @@ public class Target : MonoBehaviour
 
     // Start is called before the first frame update
     //will call the constructor, and depending on the stats of the level, generate its color, speed, value, etc.
+    //targets can use rigid body, add force and let them fall, do in unity editor instead of in a script
     void Start()
     {
         
@@ -44,7 +46,7 @@ public class Target : MonoBehaviour
     {
         //change the target to hit
         isHit = true;
-        //LevelLogic.Hit(this); //pass this target into the level logic hit method, figure out the syntax for this its throwing an error
+        levelLogic.Hit(this); //pass this target into the level logic hit method, figure out the syntax for this its throwing an error
     }
 
 
