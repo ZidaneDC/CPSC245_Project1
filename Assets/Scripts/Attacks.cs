@@ -23,15 +23,15 @@ public class Attacks : MonoBehaviour
 
     public void SpawnWave()
     {
-        Instantiate(wave, new Vector3(-10, 0.4f, 0), Quaternion.identity);
-        Rigidbody waveRigidbody = wave.GetComponent<Rigidbody>();
-        waveRigidbody.AddForce(Vector3.right * 1000f);
+        GameObject go1 = Instantiate(wave, new Vector3(-10, 0.4f, 0), Quaternion.identity);
+        Rigidbody waveRigidbody = go1.GetComponent<Rigidbody>();
+        waveRigidbody.AddForce(Vector3.right * 300f);
     }
 
     public void SpawnDragon()
     {
-        Instantiate(dragon, new Vector3(-10, 1, 0), Quaternion.identity);
-        Rigidbody dragonRigidbody = dragon.GetComponent<Rigidbody>();
+        GameObject go2 = Instantiate(dragon, new Vector3(-10, 1, 0), Quaternion.identity);
+        Rigidbody dragonRigidbody = go2.GetComponent<Rigidbody>();
         dragonRigidbody.AddForce(Vector3.right * 300f);
     }
 
