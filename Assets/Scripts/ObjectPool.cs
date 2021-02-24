@@ -5,10 +5,11 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     //basic object pooling setup, generating different colors will need to be added in
-    //attach this to the game controller in unity (or just rewrite this into game logic
+    //the unity site link (in disc) has code that involves how to call an object from a pool instead of instantiating, during this call the color could be changed by some odds
+    //attach this to the game controller in unity (or just rewrite this into game logic)
     //in the unity editor you will be able to select what game object is pooled, so the target class can  be added to that
     public static ObjectPool SharedInstance;
-    public List<GameObject> pooledTargets;
+    public static List<GameObject> pooledTargets;
     public GameObject targetToPool;
     public int amountToPool;
 
