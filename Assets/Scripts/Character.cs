@@ -14,6 +14,7 @@ public class Character : MonoBehaviour
     private Vector3 bigScale;
     private float sizeTimer = .75f;
     private Boolean isGrounded = false;
+    private Boolean canMove;
 
     // Start is called before the first frame update
     void Start()
@@ -21,16 +22,17 @@ public class Character : MonoBehaviour
         smallScale = new Vector3(1f, 0.5f, 1f);
         bigScale = new Vector3(1f, 1f, 1f);
         isGrounded = true;
+        canMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canMove)
             shootFire();
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded && canMove)
             jump();
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) && canMove)
             duck();
     }
 
@@ -43,13 +45,13 @@ public class Character : MonoBehaviour
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.yellow);
             isGrounded = true;
-            print("is grounded");
+            //print("is grounded");
         }
         else
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.yellow);
             isGrounded = false;
-            print("is NOT grounded");
+            //print("is NOT grounded");
         }
     }
 
@@ -68,9 +70,12 @@ public class Character : MonoBehaviour
     private void duck()
     {
         //character moving a certain height down
-        dragon.transform.position = new Vector3(transform.position.x, 0.35f, transform.position.z);
-        dragon.transform.localScale = smallScale;
-        StartCoroutine(waitForNormalSize());
+        if (canMove)
+        {
+            dragon.transform.position = new Vector3(transform.position.x, 0.35f, transform.position.z);
+            dragon.transform.localScale = smallScale;
+            StartCoroutine(waitForNormalSize());
+        }
     }
 
     private IEnumerator waitForNormalSize()
@@ -83,6 +88,11 @@ public class Character : MonoBehaviour
     {
         dragon.transform.position = new Vector3(transform.position.x, 0.58f, transform.position.z);
         dragon.transform.localScale = bigScale;
+    }
+
+    public void SetCanMoveToFalse()
+    {
+        canMove = false;
     }
 
 }
