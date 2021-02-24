@@ -23,9 +23,10 @@ public class GameLogic : MonoBehaviour
         CheckLives();
     }
 
-    private void LoseLife()
+    public void LoseLife()
     {
         lives--;
+        print("life lost: " + lives);
     }
 
     private void CheckLives()
@@ -37,6 +38,7 @@ public class GameLogic : MonoBehaviour
     private void EndGame()
     {
             //end level: stop eel spawn
+            //stop attack spawn
             //show end screen
             //character functionality ended
             Character.SetCanMoveToFalse();
@@ -53,5 +55,4 @@ public class GameLogic : MonoBehaviour
         currentLevel++;
         return currentLevel;
     }
-
 }

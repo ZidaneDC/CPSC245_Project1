@@ -15,6 +15,7 @@ public class Character : MonoBehaviour
     private float sizeTimer = .75f;
     private Boolean isGrounded = false;
     private Boolean canMove;
+    public GameLogic GameLogic;
 
     // Start is called before the first frame update
     void Start()
@@ -93,6 +94,16 @@ public class Character : MonoBehaviour
     public void SetCanMoveToFalse()
     {
         canMove = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Attack")
+        {
+            //print("life lost");
+            GameLogic.LoseLife();
+            Destroy(collision.gameObject);
+        }
     }
 
 }

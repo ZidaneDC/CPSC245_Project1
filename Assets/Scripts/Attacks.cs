@@ -11,8 +11,8 @@ public class Attacks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnWave();
-        SpawnDragon();
+        //SpawnWave();
+        //SpawnDragon();
     }
 
     // Update is called once per frame
