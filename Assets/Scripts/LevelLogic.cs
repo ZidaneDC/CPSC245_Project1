@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class LevelLogic : MonoBehaviour
 {
     //Level Logic class, controls target color, objective counters, level score and point mutliplier's
@@ -16,7 +17,10 @@ public class LevelLogic : MonoBehaviour
     float targetTimer; //how often a new wave of targets appears
 
     List<string> objectiveOptions = new List<string>() { "red", "blue", "green", "yellow", "purple"}; //color options, bomb targets will be set to black
-    Random randNum = new Random(); //for objective randomization
+    System.Random random = new System.Random(); //for objective randomization
+
+    public Attacks attacks;
+    public ObjectPool objectPool;
 
 
     //default constructor
@@ -46,8 +50,8 @@ public class LevelLogic : MonoBehaviour
         scoreMultiplier = 1;
         objectiveCount = 0;
 
-        //int randomPos = randNum.Next(objectiveOptions.Count);  //FIX ME next command is throwing an error, should generate a random int to determine objective color
-        //objectiveColor = objectiveOptions[randomPos];
+        int randomPos = random.Next(objectiveOptions.Count); 
+        objectiveColor = objectiveOptions[randomPos];
     }
 
 
@@ -55,21 +59,19 @@ public class LevelLogic : MonoBehaviour
     void Start()
     {
         //call game or ui class to display the level start panel
-        SetOdds();
-        SpawnAttacks();
-        SpawnTargets();
+        //SetOdds();
+        StartCoroutine(SpawnAttacks());
+        StartCoroutine(SpawnTargets());
     }
 
     // Update is called once per frame
-    void Update() //call the level complete check, as well as the methods for spawning targets, and add level score to the total score
+    void Update() //call the level complete check and method to add level score to the total score
     {
         if(objectiveCount == objectiveGoal)
         {
             LevelComplete();
         }
-
-        //just for testing, spawn an attack every 15 seconds
-
+       
     }
 
 
@@ -89,12 +91,12 @@ public class LevelLogic : MonoBehaviour
             hitTarget.gameObject.SetActive(false);
             //add points and point multiplier
             objectiveCount += 1;
-            if (hitTarget.isBomb == true) //if the target is a bomb, call destroy all method
-            {
-                DestroyAll();
-            }
         }
 
+        if (hitTarget.isBomb == true) //if the target is a bomb, call destroy all method
+        {
+            DestroyAll();
+        }
     }
 
     //method that will set the chances of objectives and attacks spawning, DO THIS LAST
@@ -103,21 +105,49 @@ public class LevelLogic : MonoBehaviour
 
     }
 
-    //Method to spawn targets every x amount of seconds, setting this to 5 currentl until I work out the odds calculation
+    //Method to spawn targets every x amount of seconds, setting this to 5 currently until I work out the odds calculation
     IEnumerator SpawnTargets()
     {
         //grab 5 random targets from the object pool, create a list of them, set all of them to active, and apply an upward force to them
+        //random access 5 objects from the pool, change their properties by level odds, set them to active, launch them upwards
+        //afterwards worry about how targets will be returned, clear the new small list of objects after turning them off
 
-        yield return new WaitForSeconds(5f);
+        while (true)
+        {
+            List<GameObject> targetsToLaunch = new List<GameObject>();
+            for (int i = 0; i < 5; i++)
+            {
+                int randPos = random.Next(0, ObjectPool.pooledTargets.Count);
+                targetsToLaunch.Add(ObjectPool.pooledTargets[randPos]);
+            }
+
+            foreach (GameObject launchTarget in targetsToLaunch)
+            {
+                launchTarget.gameObject.SetActive(true);
+                Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
+                targetRigidBody.AddForce(0, 1, 0, ForceMode.Impulse);
+            }
+
+            yield return new WaitForSeconds(5f);
+        }
     }
 
-    //coroutine for spawning attacks every x amount of intervals (making it 20 seconds just for testing)
+    //coroutine for spawning attacks every x amount of intervals (making it 13 seconds just for testing)
     IEnumerator SpawnAttacks()
     {
-        // 50 50 chance of either attack spawning, but random isnt cooperating with me right now, so I'm just using high attacks
-        //Attacks.SpawnDragon(); //I think the access to this isn't working as it is non static
+        while (true)
+        {
+            if (random.Next(0, 2) == 0)
+            {
+                attacks.SpawnWave();
+            }
+            else
+            {
+                attacks.SpawnDragon();
+            }
 
-        yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(13f);
+        }
     }
 
        
@@ -132,6 +162,7 @@ public class LevelLogic : MonoBehaviour
         }
         
     }
+
 
    //check for level complete method to end level when objective is reached
    //stops the level (maybe similar to pause) and shows the end of level ui

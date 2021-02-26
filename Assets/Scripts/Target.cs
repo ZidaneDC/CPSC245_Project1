@@ -40,6 +40,19 @@ public class Target : MonoBehaviour
         
     }
 
+    //method to be called by level logic to change a targets properties based on level difficulty
+    //will change speed, target color, value, and whether it is a bomb target.
+    //Speed and value are set values determined by the level, while target color and bomb status are random, but also controlled by level
+    //there will be another method in level logic that determines these odds, and passes them into this method
+    public void setTargetValues(string inputColor, int inputSpeed, int inputValue, bool inputIsBomb) 
+    {
+        targetColor = inputColor;
+        targetSpeed = inputSpeed;
+        targetValue = inputValue;
+        isBomb = inputIsBomb;
+    }
+
+
     //Targets will register when they've been hit individually, then pass that info into level logic which will update the score and handle bomb target behaviour
     //this will be done using OnMouseDown instead of the Hit method below
     private void OnMouseDown()
