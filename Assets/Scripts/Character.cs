@@ -5,6 +5,18 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    /*
+ 1.
+ a. Delaney Tobin
+ b. 2339699
+ c. dtobin@chapman.edu  
+ d. CPSC 245-01
+ e. Eel Shooter - Milestone 1
+ f. This is my own work, and I did not cheat on this assignment.
+  
+2. Character controls the character's movement, as well as its collision with attacks
+
+*/
     public GameObject dragon;
     public Rigidbody dragonRigidbody;
     private int charaacterHappiness;

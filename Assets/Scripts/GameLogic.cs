@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
+
+/*
+ 1.
+ a. Delaney Tobin
+ b. 2339699
+ c. dtobin@chapman.edu  
+ d. CPSC 245-01
+ e. Eel Shooter - Milestone 1
+ f. This is my own work, and I did not cheat on this assignment.
+  
+2. GameLogc controls the overall game aspects such as lives, level updates, and pausing,
+
+*/
     public int lives;
     private int currentLevel;
     public Character Character;
