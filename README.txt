@@ -6,6 +6,13 @@
  d. Course Number and Session: CPSC 245-01
  e. Assignemnt: Eel Shooter - Milestone 1
  f. This is my own work, and I did not cheat on this assignment.
+
+ a. Delaney Tobin
+ b. 2339699
+ c. dtobin@chapman.edu  
+ d. CPSC 245-01
+ e. Eel Shooter - Milestone 1
+ f. This is my own work, and I did not cheat on this assignment.
   
 2.) List of source files submitted
 Character.cs
