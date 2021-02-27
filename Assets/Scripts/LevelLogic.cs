@@ -5,8 +5,22 @@ using UnityEngine;
 
 public class LevelLogic : MonoBehaviour
 {
-    //Level Logic class, controls target color, objective counters, level score and point mutliplier's
-    //will also have methods to check that an object being hit is the correct target, if it is a target at all
+
+ /*
+ 1.
+ a. Zidane De Cantuaria
+ b. 002325417
+ c. decantuaria@chapman.edu  
+ d. CPSC 245-01
+ e. Eel Shooter - Milestone 1
+ f. This is my own work, and I did not cheat on this assignment.
+  
+2. LevelLogic keeps track of player objectives and progress in a level, behaviour once a target is hit, as well as spawning attacks and targets to hit at given intervals.
+    It also determines the difficulty of a given level by setting variables such as target speeds and attack rates. 
+    Once a level has been completed, its information will be sent to GameLogic.
+
+*/
+    
     int levelCount;
     string objectiveColor;
     int levelScore;
@@ -15,6 +29,8 @@ public class LevelLogic : MonoBehaviour
     double objectiveChance; //odds that the correct type of target is spawned
     int scoreMultiplier;
     float targetTimer; //how often a new wave of targets appears
+    float attackTimer; //how often an attack appears
+    int targetCount; //how many targets are spawned at once
 
     List<string> objectiveOptions = new List<string>() { "red", "blue", "green", "yellow", "purple"}; //color options, bomb targets will be set to black
     System.Random random = new System.Random(); //for objective randomization
@@ -26,32 +42,17 @@ public class LevelLogic : MonoBehaviour
     //default constructor
     public LevelLogic()
     {
-        levelCount = 0;
+        levelCount = 1;
         objectiveColor = "null";
         levelScore = 0;
-        objectiveGoal = -1; //to prevent immediate spawn of the next level, since levels will move on once the number of targets hit equals the objective goal
+        objectiveGoal = 1;
         objectiveCount = 0;
         objectiveChance = 1; //1 being 100% chance
         scoreMultiplier = 1;
-        targetTimer = 0;
+        targetTimer = 7;
+        attackTimer = 15f;
+        targetCount = 3;
 
-    }
-
-    //pararameterized constructor
-    //odds for target spawns, number of targets needed to hit for the level, and target movement speeds and spawn rate are determined by game logic and passed in
-    //game logic will track what overall level the player is on and pass the difficulty settings for the level into level logic
-    public LevelLogic(int inputLevelCount, int inputGoal, double inputChance, float inputTimer)
-    {
-        levelCount = inputLevelCount;
-        objectiveGoal = inputGoal;
-        objectiveChance = inputChance;
-        targetTimer = inputTimer;
-        levelScore = 0;
-        scoreMultiplier = 1;
-        objectiveCount = 0;
-
-        int randomPos = random.Next(objectiveOptions.Count); 
-        objectiveColor = objectiveOptions[randomPos];
     }
 
 
@@ -59,23 +60,27 @@ public class LevelLogic : MonoBehaviour
     void Start()
     {
         //call game or ui class to display the level start panel
-        //SetOdds();
+        //SetOdds(); //determine objectives
+        Debug.Log("Level Number: " + levelCount);
+        Debug.Log("Objective Color: " + objectiveColor);
         StartCoroutine(SpawnAttacks());
         StartCoroutine(SpawnTargets());
     }
 
     // Update is called once per frame
-    void Update() //call the level complete check and method to add level score to the total score
+    void Update()
     {
         if(objectiveCount == objectiveGoal)
         {
             LevelComplete();
+            LevelReset();
+            StartCoroutine(SpawnAttacks());
+            StartCoroutine(SpawnTargets());
         }
        
     }
 
 
-    //method that handles what happens when a target is hit, pass in a target object to access its variables
     public void Hit(Target hitTarget)
     {
        //if the target is not the correct color
@@ -90,32 +95,32 @@ public class LevelLogic : MonoBehaviour
             hitTarget.isHit = true;
             hitTarget.gameObject.SetActive(false);
             //add points and point multiplier
+            levelScore += hitTarget.targetValue;
             objectiveCount += 1;
+            Debug.Log("Objective Count: " + objectiveCount + " / " + objectiveGoal);
         }
 
-        if (hitTarget.isBomb == true) //if the target is a bomb, call destroy all method
+        if (hitTarget.isBomb == true)
         {
             DestroyAll();
         }
     }
 
-    //method that will set the chances of objectives and attacks spawning, DO THIS LAST
+    //SetOdds is a method that will set the chances of objectives and attacks spawning, DO THIS LAST
     public void SetOdds()
     {
 
     }
 
-    //Method to spawn targets every x amount of seconds, setting this to 5 currently until I work out the odds calculation
+    
     IEnumerator SpawnTargets()
     {
-        //grab 5 random targets from the object pool, create a list of them, set all of them to active, and apply an upward force to them
-        //random access 5 objects from the pool, change their properties by level odds, set them to active, launch them upwards
-        //afterwards worry about how targets will be returned, clear the new small list of objects after turning them off
+        //FIXME: this method still needs a way to return to return targets back to the obect pool once a wave has ended
 
         while (true)
         {
             List<GameObject> targetsToLaunch = new List<GameObject>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < targetCount; i++)
             {
                 int randPos = random.Next(0, ObjectPool.pooledTargets.Count);
                 targetsToLaunch.Add(ObjectPool.pooledTargets[randPos]);
@@ -125,14 +130,15 @@ public class LevelLogic : MonoBehaviour
             {
                 launchTarget.gameObject.SetActive(true);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
-                targetRigidBody.AddForce(0, 1, 0, ForceMode.Impulse);
+                //FIXEME: the specific value for object force needs to be adjusted
+                targetRigidBody.AddForce(Vector3.up* 50f);
             }
 
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(targetTimer);
         }
     }
 
-    //coroutine for spawning attacks every x amount of intervals (making it 13 seconds just for testing)
+   
     IEnumerator SpawnAttacks()
     {
         while (true)
@@ -146,35 +152,59 @@ public class LevelLogic : MonoBehaviour
                 attacks.SpawnDragon();
             }
 
-            yield return new WaitForSeconds(13f);
+            yield return new WaitForSeconds(attackTimer);
         }
     }
 
        
-    //Method called if the hit target is an bomb, will destroy all other targets onscreen and player's score will increase accordingly
-    //figure out how to get all of the targets currently onscreen
-    //using pooling, you can look at all active objects and turn them off instead of destroying them
+    
     public void DestroyAll()
     {
-        //check all targets in the object pool and set them to false
+        //FIXME: shouldn't access all of the object pool, only the targets that are currently active
         foreach(GameObject targetToDisable in ObjectPool.pooledTargets){
             targetToDisable.gameObject.SetActive(false);
         }
         
     }
 
-
-   //check for level complete method to end level when objective is reached
-   //stops the level (maybe similar to pause) and shows the end of level ui
-   //sends info back to game logic so the next level can be started
-   //have individual methods to set things to 0 or reset
-   //returns entire level to game logic so its score and level number can be stored
+   
    public LevelLogic LevelComplete()
     {
-        //call whichever methods stop the game and reset things like level score and pause spawns
         DestroyAll();
+        StopAllCoroutines();
         return this;
     }
 
+    //LevelReset is a method that will activate once a level is beaten, and assign new values to the level, such as increased target spawn, different objective color, etc.
+    public void LevelReset()
+    {
+        levelCount += 1;
+        objectiveCount = 0;
+        if(levelCount == 2)
+        {
+            targetTimer = 6;
+            attackTimer = 15;
+            targetCount = 4;
+            objectiveGoal += 2;
+        }
+
+        else if (levelCount == 3)
+        {
+            targetTimer = 5;
+            attackTimer = 12;
+            targetCount = 5;
+            objectiveGoal += 3;
+        }
+
+        else
+        {
+            targetTimer = 4;
+            attackTimer = 10;
+            targetCount = 6;
+            objectiveGoal += 3;
+        }
+        Debug.Log("New level! Level " + levelCount);
+        Debug.Log("Objective Color: " + objectiveColor);
+    }
 
 }

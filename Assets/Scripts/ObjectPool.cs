@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    //basic object pooling setup, generating different colors will need to be added in
-    //the unity site link (in disc) has code that involves how to call an object from a pool instead of instantiating, during this call the color could be changed by some odds
-    //attach this to the game controller in unity (or just rewrite this into game logic)
-    //in the unity editor you will be able to select what game object is pooled, so the target class can  be added to that
+    /*
+ 1.
+ a. Zidane De Cantuaria
+ b. 002325417
+ c. decantuaria@chapman.edu  
+ d. CPSC 245-01
+ e. Eel Shooter - Milestone 1
+ f. This is my own work, and I did not cheat on this assignment.
+  
+2. ObjectPool is a class that creates a set of gameObjects to be used as targets that LevelLogic will activate and access for the player to hit.
+    Once a target is hit, it should return to the object pool.
+
+*/
     public static ObjectPool SharedInstance;
     public static List<GameObject> pooledTargets;
     public GameObject targetToPool;
@@ -42,11 +51,5 @@ public class ObjectPool : MonoBehaviour
             tmp.SetActive(false);
             pooledTargets.Add(tmp);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

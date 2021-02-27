@@ -15,7 +15,7 @@ public class GameLogic : MonoBehaviour
  e. Eel Shooter - Milestone 1
  f. This is my own work, and I did not cheat on this assignment.
   
-2. GameLogc controls the overall game aspects such as lives, level updates, and pausing,
+2. GameLogic controls the overall game aspects such as lives, level updates, and pausing,
 
 */
     public int lives;
@@ -52,9 +52,11 @@ public class GameLogic : MonoBehaviour
     {
             //end level: stop eel spawn
             //stop attack spawn
+            LevelLogic.LevelComplete();
             //show end screen
             //character functionality ended
             Character.SetCanMoveToFalse();
+            Debug.Log("Game over.");
     }
 
     private void Pause()
