@@ -76,4 +76,24 @@ public class UI : MonoBehaviour
         level = GameLogic.UpdateLevel();
         LevelText.text = "Level: " + level;
     }
+
+    public void WarnForDragon()
+    {
+        DragonWarningCanvasGroup.alpha = 1;
+    }
+
+    public void WarnForWave()
+    {
+        WaveWarningCanvasGroup.alpha = 1;
+    }
+
+    public void HideDragonWarning()
+    {
+        DragonWarningCanvasGroup.alpha = 0;
+    }
+
+    public void HideWaveWarning()
+    {
+        WaveWarningCanvasGroup.alpha = 0;
+    }
 }
