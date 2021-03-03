@@ -22,13 +22,16 @@ public class GameLogic : MonoBehaviour
     private int currentLevel;
     public Character Character;
     public LevelLogic LevelLogic;
+    public UI UI;
     //UI reference
     //total score
 
     void Start()
     {
         lives = 3;
+        UI.UpdateLivesUI(lives);
         currentLevel = 1;
+        UI.UpdateLevelUI(currentLevel);
     }
 
     void Update()
@@ -40,6 +43,7 @@ public class GameLogic : MonoBehaviour
     {
         lives--;
         print("life lost: " + lives);
+        UI.UpdateLivesUI(lives);
     }
 
     private void CheckLives()
@@ -56,6 +60,7 @@ public class GameLogic : MonoBehaviour
             //show end screen
             //character functionality ended
             Character.SetCanMoveToFalse();
+        UI.GameOverScreen();
             Debug.Log("Game over.");
     }
 
@@ -65,7 +70,7 @@ public class GameLogic : MonoBehaviour
         //pause screen comes up
     }
 
-    private int UpdateLevel()
+    public int UpdateLevel()
     {
         currentLevel++;
         return currentLevel;
