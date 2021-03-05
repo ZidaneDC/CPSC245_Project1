@@ -10,10 +10,12 @@ public class UI : MonoBehaviour
     public CanvasGroup DragonWarningCanvasGroup;
     public CanvasGroup GameOverCanvasGroup;
     public CanvasGroup PauseCanvasGroup;
+    public CanvasGroup InGameUICanvasGroup;
     public Text LevelText;
     public Text LivesText;
+    public Text ObjectiveCounter;
     public GameLogic GameLogic;
-    public Image ObjectiveColor;
+    public Image ObjectiveColorImage;
 
     // Start is called before the first frame update
     void Start()
@@ -30,25 +32,38 @@ public class UI : MonoBehaviour
     public void ResetGame()
     {
         StartGameCanvasGroup.alpha = 1;
+        InGameUICanvasGroup.alpha = 0;
         WaveWarningCanvasGroup.alpha = 0;
         DragonWarningCanvasGroup.alpha = 0;
         GameOverCanvasGroup.alpha = 0;
         PauseCanvasGroup.alpha = 0;
+        Time.timeScale = 0;
     }
 
     public void StartGame()
     {
         StartGameCanvasGroup.alpha = 0;
+        InGameUICanvasGroup.alpha = 1;
+        Time.timeScale = 1;
     }
 
     public void PauseGame()
     {
         PauseCanvasGroup.alpha = 1;
+        InGameUICanvasGroup.alpha = 0;
+        Time.timeScale = 0;
     }
 
     public void Restart()
     {
         ResetGame();
+    }
+
+    public void ResumeGame()
+    {
+        PauseCanvasGroup.alpha = 0;
+        InGameUICanvasGroup.alpha = 1;
+        Time.timeScale = 1;
     }
 
     public void GameOverScreen()
@@ -63,7 +78,17 @@ public class UI : MonoBehaviour
 
     public void UpdateObjective(string objectiveColor, int objectiveCount, int objectiveGoal)
     {
-
+        ObjectiveCounter.text = objectiveCount + " / " + objectiveGoal;
+        if (objectiveColor == "yellow")
+            ObjectiveColorImage.GetComponent<Image>().color = Color.yellow;
+        if (objectiveColor == "red")
+            ObjectiveColorImage.GetComponent<Image>().color = Color.red;
+        if (objectiveColor == "purple")
+            ObjectiveColorImage.GetComponent<Image>().color = new Color (113, 45, 195);
+        if (objectiveColor == "blue")
+            ObjectiveColorImage.GetComponent<Image>().color = Color.blue;
+        if (objectiveColor == "green")
+            ObjectiveColorImage.GetComponent<Image>().color = Color.green;
     }
 
     public void UpdateLivesUI(int lives)
