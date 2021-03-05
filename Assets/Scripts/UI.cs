@@ -61,7 +61,7 @@ public class UI : MonoBehaviour
         ResetGame();
     }
 
-    public void UpdateObjective()
+    public void UpdateObjective(string objectiveColor, int objectiveCount, int objectiveGoal)
     {
 
     }

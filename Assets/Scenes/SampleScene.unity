@@ -2310,6 +2310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacks: {fileID: 1334636760}
   objectPool: {fileID: 1334636762}
+  ui: {fileID: 1334636763}
 --- !u!114 &1334636762
 MonoBehaviour:
   m_ObjectHideFlags: 0

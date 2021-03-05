@@ -24,6 +24,7 @@ public class LevelLogic : MonoBehaviour
     int levelCount;
     string objectiveColor;
     int levelScore;
+    bool bonusLevel;
     int objectiveGoal; //number of correct targets that needs to be hit to beat the level
     int objectiveCount; //how many correct targets have been hit already
     double objectiveChance; //odds that the correct type of target is spawned
@@ -37,6 +38,7 @@ public class LevelLogic : MonoBehaviour
 
     public Attacks attacks;
     public ObjectPool objectPool;
+    public UI UI; //UI reference to call methods
 
 
     //default constructor
@@ -44,6 +46,7 @@ public class LevelLogic : MonoBehaviour
     {
         levelCount = 1;
         objectiveColor = "null";
+        bonusLevel = false;
         levelScore = 0;
         objectiveGoal = 1;
         objectiveCount = 0;
@@ -97,6 +100,7 @@ public class LevelLogic : MonoBehaviour
             //add points and point multiplier
             levelScore += hitTarget.targetValue;
             objectiveCount += 1;
+            UI.UpdateObjective(objectiveColor, objectiveCount, objectiveGoal);
             Debug.Log("Objective Count: " + objectiveCount + " / " + objectiveGoal);
         }
 
@@ -104,6 +108,13 @@ public class LevelLogic : MonoBehaviour
         {
             DestroyAll();
         }
+    }
+
+
+    //method to return objective color for ui
+    public string checkObjectiveColor()
+    {
+        return this.objectiveColor;
     }
 
     //SetOdds is a method that will set the chances of objectives and attacks spawning, DO THIS LAST
@@ -128,6 +139,10 @@ public class LevelLogic : MonoBehaviour
 
             foreach (GameObject launchTarget in targetsToLaunch)
             {
+                if (this.bonusLevel == true)
+                {
+                    //FIXME cant call target specifc methods since gameobjects are being accessed instead, so the method to change target values cant be called
+                }
                 launchTarget.gameObject.SetActive(true);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
                 //FIXEME: the specific value for object force needs to be adjusted
@@ -145,11 +160,15 @@ public class LevelLogic : MonoBehaviour
         {
             if (random.Next(0, 2) == 0)
             {
+                UI.WarnForWave();
                 attacks.SpawnWave();
+                Invoke("HideWaveWarning", 2.0f);
             }
             else
             {
+                UI.WarnForDragon();
                 attacks.SpawnDragon();
+                Invoke("HideDragonWarning", 2.0f);
             }
 
             yield return new WaitForSeconds(attackTimer);
@@ -175,7 +194,7 @@ public class LevelLogic : MonoBehaviour
         return this;
     }
 
-    //LevelReset is a method that will activate once a level is beaten, and assign new values to the level, such as increased target spawn, different objective color, etc.
+    //LevelReset is a method that will activate once a level is beaten, and assign new values to the level, such as increased target spawn, bonus level status, different objective color, etc.
     public void LevelReset()
     {
         levelCount += 1;
@@ -203,8 +222,20 @@ public class LevelLogic : MonoBehaviour
             targetCount = 6;
             objectiveGoal += 3;
         }
+        UI.UpdateObjective(objectiveColor, objectiveCount, objectiveGoal);
         Debug.Log("New level! Level " + levelCount);
         Debug.Log("Objective Color: " + objectiveColor);
+
+        if (random.Next(0, 2) == 1)
+        {
+            bonusLevel = true;
+            Debug.Log("Bonus Level!");
+        }
+
+        else
+        {
+            bonusLevel = false;
+        }
     }
 
 }
