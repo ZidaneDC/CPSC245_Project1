@@ -11,6 +11,7 @@ public class UI : MonoBehaviour
     public CanvasGroup GameOverCanvasGroup;
     public CanvasGroup PauseCanvasGroup;
     public CanvasGroup InGameUICanvasGroup;
+    public CanvasGroup BombEelWarningCanvasGroup;
     public Text LevelText;
     public Text LivesText;
     public Text ObjectiveCounter;
@@ -37,6 +38,7 @@ public class UI : MonoBehaviour
         DragonWarningCanvasGroup.alpha = 0;
         GameOverCanvasGroup.alpha = 0;
         PauseCanvasGroup.alpha = 0;
+        BombEelWarningCanvasGroup.alpha = 0;
         Time.timeScale = 0;
     }
 
@@ -53,6 +55,7 @@ public class UI : MonoBehaviour
         InGameUICanvasGroup.alpha = 0;
         Time.timeScale = 0;
     }
+
 
     public void Restart()
     {
@@ -121,4 +124,16 @@ public class UI : MonoBehaviour
     {
         WaveWarningCanvasGroup.alpha = 0;
     }
+
+    public void WarnForBombEel()
+    {
+        BombEelWarningCanvasGroup.alpha = 1;
+    }
+
+    public void HideBombEelWarning()
+    {
+        BombEelWarningCanvasGroup.alpha = 0;
+    }
+
+
 }

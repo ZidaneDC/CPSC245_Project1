@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6888565968164435412}
   - component: {fileID: 6888565968164435413}
   - component: {fileID: 6888565968164435414}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: dragonAttack
   m_TagString: Attack
   m_Icon: {fileID: 0}
