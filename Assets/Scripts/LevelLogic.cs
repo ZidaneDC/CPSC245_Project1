@@ -76,6 +76,7 @@ public class LevelLogic : MonoBehaviour
         if(objectiveCount == objectiveGoal)
         {
             LevelComplete();
+            levelCount += 1;
             LevelReset();
             StartCoroutine(SpawnAttacks());
             StartCoroutine(SpawnTargets());
@@ -141,7 +142,10 @@ public class LevelLogic : MonoBehaviour
             {
                 if (this.bonusLevel == true)
                 {
-                    //FIXME cant call target specifc methods since gameobjects are being accessed instead, so the method to change target values cant be called
+                    UI.WarnForBombEel();
+                    Debug.Log("Bomb target incoming!");
+                    launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, 1, 100, true);
+                    UI.Invoke("HideBombEelWarning", 2.0f);
                 }
                 launchTarget.gameObject.SetActive(true);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
@@ -162,13 +166,13 @@ public class LevelLogic : MonoBehaviour
             {
                 UI.WarnForWave();
                 attacks.SpawnWave();
-                Invoke("HideWaveWarning", 2.0f);
+                UI.Invoke("HideWaveWarning", 2.0f);
             }
             else
             {
                 UI.WarnForDragon();
                 attacks.SpawnDragon();
-                Invoke("HideDragonWarning", 2.0f);
+                UI.Invoke("HideDragonWarning", 2.0f);
             }
 
             yield return new WaitForSeconds(attackTimer);
@@ -197,7 +201,6 @@ public class LevelLogic : MonoBehaviour
     //LevelReset is a method that will activate once a level is beaten, and assign new values to the level, such as increased target spawn, bonus level status, different objective color, etc.
     public void LevelReset()
     {
-        levelCount += 1;
         objectiveCount = 0;
         if(levelCount == 2)
         {
@@ -236,6 +239,7 @@ public class LevelLogic : MonoBehaviour
         {
             bonusLevel = false;
         }
+        UI.UpdateBonusLevelUI(bonusLevel);
     }
 
 }

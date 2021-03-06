@@ -12,9 +12,11 @@ public class UI : MonoBehaviour
     public CanvasGroup PauseCanvasGroup;
     public CanvasGroup InGameUICanvasGroup;
     public CanvasGroup BombEelWarningCanvasGroup;
+    public CanvasGroup BonusLevelCanvasGroup;
     public Text LevelText;
     public Text LivesText;
     public Text ObjectiveCounter;
+    public LevelLogic LevelLogic;
     public GameLogic GameLogic;
     public Image ObjectiveColorImage;
 
@@ -39,6 +41,7 @@ public class UI : MonoBehaviour
         GameOverCanvasGroup.alpha = 0;
         PauseCanvasGroup.alpha = 0;
         BombEelWarningCanvasGroup.alpha = 0;
+        BonusLevelCanvasGroup.alpha = 0;
         Time.timeScale = 0;
     }
 
@@ -60,6 +63,7 @@ public class UI : MonoBehaviour
     public void Restart()
     {
         ResetGame();
+        LevelLogic.LevelReset();
     }
 
     public void ResumeGame()
@@ -135,5 +139,16 @@ public class UI : MonoBehaviour
         BombEelWarningCanvasGroup.alpha = 0;
     }
 
+    public void UpdateBonusLevelUI(bool bonusLevel)
+    {
+        if (bonusLevel == false)
+        {
+            BonusLevelCanvasGroup.alpha = 0;
+        }
+        else
+        {
+            BonusLevelCanvasGroup.alpha = 1;
+        }
+    }
 
 }
