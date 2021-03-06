@@ -25,6 +25,8 @@ UI.cs
 
 3) Description of any known compile/runtime errors, or bugs
 a. Pause button and Game over restart buttons don't work
+b.) Null Reference exception error is still occurring when LevelLogic tries
+to access the objectPool, and target spawning is no longer working, likely because of this
 
 4.) References used to complete the assignment
 stackoverflow.com

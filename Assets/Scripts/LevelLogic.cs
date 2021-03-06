@@ -12,7 +12,7 @@ public class LevelLogic : MonoBehaviour
  b. 002325417
  c. decantuaria@chapman.edu  
  d. CPSC 245-01
- e. Eel Shooter - Milestone 1
+ e. Eel Shooter - Milestone 2
  f. This is my own work, and I did not cheat on this assignment.
   
 2. LevelLogic keeps track of player objectives and progress in a level, behaviour once a target is hit, as well as spawning attacks and targets to hit at given intervals.
@@ -66,6 +66,7 @@ public class LevelLogic : MonoBehaviour
         //SetOdds(); //determine objectives
         Debug.Log("Level Number: " + levelCount);
         Debug.Log("Objective Color: " + objectiveColor);
+        UI.UpdateObjective(objectiveColor, objectiveCount, objectiveGoal);
         StartCoroutine(SpawnAttacks());
         StartCoroutine(SpawnTargets());
     }
@@ -140,17 +141,17 @@ public class LevelLogic : MonoBehaviour
 
             foreach (GameObject launchTarget in targetsToLaunch)
             {
-                if (this.bonusLevel == true)
-                {
-                    UI.WarnForBombEel();
-                    Debug.Log("Bomb target incoming!");
-                    launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, 1, 100, true);
-                    UI.Invoke("HideBombEelWarning", 2.0f);
-                }
+                //if (this.bonusLevel == true)
+                //{
+                //    UI.WarnForBombEel();
+                //    Debug.Log("Bomb target incoming!");
+                //    launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, 1, 100, true);
+                //    UI.Invoke("HideBombEelWarning", 2.0f);
+                //}
                 launchTarget.gameObject.SetActive(true);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
                 //FIXEME: the specific value for object force needs to be adjusted
-                targetRigidBody.AddForce(Vector3.up* 50f);
+                targetRigidBody.AddForce(Vector3.up* 80f);
             }
 
             yield return new WaitForSeconds(targetTimer);
