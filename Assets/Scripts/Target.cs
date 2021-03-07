@@ -37,7 +37,7 @@ public class Target : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        levelLogic = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelLogic>();
     }
 
     //SetTargetValues is a method to be called by level logic to change a targets properties based on level difficulty

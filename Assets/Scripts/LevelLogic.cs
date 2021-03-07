@@ -32,6 +32,7 @@ public class LevelLogic : MonoBehaviour
     float targetTimer; //how often a new wave of targets appears
     float attackTimer; //how often an attack appears
     int targetCount; //how many targets are spawned at once
+    public List<Transform> spawnPoints;
 
     List<string> objectiveOptions = new List<string>() { "red", "blue", "green", "yellow", "purple"}; //color options, bomb targets will be set to black
     System.Random random = new System.Random(); //for objective randomization
@@ -67,6 +68,11 @@ public class LevelLogic : MonoBehaviour
         Debug.Log("Level Number: " + levelCount);
         Debug.Log("Objective Color: " + objectiveColor);
         UI.UpdateObjective(objectiveColor, objectiveCount, objectiveGoal);
+        Invoke("LevelStart", 2f);
+    }
+
+    void LevelStart()
+    {
         StartCoroutine(SpawnAttacks());
         StartCoroutine(SpawnTargets());
     }
@@ -150,6 +156,7 @@ public class LevelLogic : MonoBehaviour
                 //}
                 launchTarget.gameObject.SetActive(true);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
+                launchTarget.gameObject.transform.position = PickSpawnLocation();
                 //FIXEME: the specific value for object force needs to be adjusted
                 targetRigidBody.AddForce(Vector3.up* 80f);
             }
@@ -241,6 +248,12 @@ public class LevelLogic : MonoBehaviour
             bonusLevel = false;
         }
         UI.UpdateBonusLevelUI(bonusLevel);
+    }
+
+    private Vector3 PickSpawnLocation()
+    {
+        int spawnIndex = Random.Range(0, spawnPoints.Count);
+        return spawnPoints[spawnIndex].position;
     }
 
 }

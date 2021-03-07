@@ -35,11 +35,15 @@ public class UI : MonoBehaviour
     public void ResetGame()
     {
         StartGameCanvasGroup.alpha = 1;
+        StartGameCanvasGroup.blocksRaycasts = true;
         InGameUICanvasGroup.alpha = 0;
+        InGameUICanvasGroup.blocksRaycasts = false;
         WaveWarningCanvasGroup.alpha = 0;
         DragonWarningCanvasGroup.alpha = 0;
-        GameOverCanvasGroup.alpha = 0;
+        //GameOverCanvasGroup.alpha = 0;
+        //GameOverCanvasGroup.blocksRaycasts = false;
         PauseCanvasGroup.alpha = 0;
+        PauseCanvasGroup.blocksRaycasts = false;
         BombEelWarningCanvasGroup.alpha = 0;
         BonusLevelCanvasGroup.alpha = 0;
         Time.timeScale = 0;
@@ -48,20 +52,26 @@ public class UI : MonoBehaviour
     public void StartGame()
     {
         StartGameCanvasGroup.alpha = 0;
+        StartGameCanvasGroup.blocksRaycasts = false;
         InGameUICanvasGroup.alpha = 1;
+        InGameUICanvasGroup.blocksRaycasts = true;
         Time.timeScale = 1;
     }
 
     public void PauseGame()
     {
         PauseCanvasGroup.alpha = 1;
+        InGameUICanvasGroup.blocksRaycasts = false;
         InGameUICanvasGroup.alpha = 0;
+        PauseCanvasGroup.blocksRaycasts = true;
         Time.timeScale = 0;
     }
 
 
     public void Restart()
     {
+        GameOverCanvasGroup.alpha = 0;
+        GameOverCanvasGroup.blocksRaycasts = false;
         ResetGame();
         LevelLogic.LevelReset();
     }
@@ -69,13 +79,16 @@ public class UI : MonoBehaviour
     public void ResumeGame()
     {
         PauseCanvasGroup.alpha = 0;
+        PauseCanvasGroup.blocksRaycasts = false;
         InGameUICanvasGroup.alpha = 1;
+        InGameUICanvasGroup.blocksRaycasts = true;
         Time.timeScale = 1;
     }
 
     public void GameOverScreen()
     {
         GameOverCanvasGroup.alpha = 1;
+        GameOverCanvasGroup.blocksRaycasts = true;
     }
 
     public void Quit()
