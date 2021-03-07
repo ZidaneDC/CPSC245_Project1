@@ -32,6 +32,7 @@ public class LevelLogic : MonoBehaviour
     float targetTimer; //how often a new wave of targets appears
     float attackTimer; //how often an attack appears
     int targetCount; //how many targets are spawned at once
+    float targetSpeed; //speed targets move at
     public List<Transform> spawnPoints;
 
     List<string> objectiveOptions = new List<string>() { "red", "blue", "green", "yellow", "purple"}; //color options, bomb targets will be set to black
@@ -56,6 +57,7 @@ public class LevelLogic : MonoBehaviour
         targetTimer = 7;
         attackTimer = 15f;
         targetCount = 3;
+        targetSpeed = 1.0f;
 
     }
 
@@ -92,19 +94,21 @@ public class LevelLogic : MonoBehaviour
     }
 
 
-    public void Hit(Target hitTarget)
+    public void Hit(GameObject hitObject)
     {
+        Debug.Log("Hit Registered");
+        Target hitTarget = hitObject.GetComponent<Target>();
        //if the target is not the correct color
        if(hitTarget.targetColor != objectiveColor)
         {
             hitTarget.isHit = true;
-            hitTarget.gameObject.SetActive(false);
+            hitObject.SetActive(false);
         }
         //if the target is the correct color 
         else
         {
             hitTarget.isHit = true;
-            hitTarget.gameObject.SetActive(false);
+            hitObject.SetActive(false);
             //add points and point multiplier
             levelScore += hitTarget.targetValue;
             objectiveCount += 1;
@@ -119,11 +123,7 @@ public class LevelLogic : MonoBehaviour
     }
 
 
-    //method to return objective color for ui
-    public string checkObjectiveColor()
-    {
-        return this.objectiveColor;
-    }
+   
 
     //SetOdds is a method that will set the chances of objectives and attacks spawning, DO THIS LAST
     public void SetOdds()
@@ -147,18 +147,20 @@ public class LevelLogic : MonoBehaviour
 
             foreach (GameObject launchTarget in targetsToLaunch)
             {
-                //if (this.bonusLevel == true)
-                //{
-                //    UI.WarnForBombEel();
-                //    Debug.Log("Bomb target incoming!");
-                //    launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, 1, 100, true);
-                //    UI.Invoke("HideBombEelWarning", 2.0f);
-                //}
+                if (this.bonusLevel == true)
+                {
+                    UI.WarnForBombEel();
+                    Debug.Log("Bomb target incoming!");
+                    launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, targetSpeed, 100, true);
+                    UI.Invoke("HideBombEelWarning", 2.0f);
+                }
+
                 launchTarget.gameObject.SetActive(true);
+                //to add in later: method that determines the odds of the target ebing the correct color
+                launchTarget.GetComponent<Target>().SetTargetValues(objectiveColor, targetSpeed, 100, false);
                 Rigidbody targetRigidBody = launchTarget.GetComponent<Rigidbody>();
                 launchTarget.gameObject.transform.position = PickSpawnLocation();
-                //FIXEME: the specific value for object force needs to be adjusted
-                targetRigidBody.AddForce(Vector3.up* 80f);
+                targetRigidBody.AddForce(Vector3.up* 50f);
             }
 
             yield return new WaitForSeconds(targetTimer);
@@ -193,7 +195,11 @@ public class LevelLogic : MonoBehaviour
     {
         //FIXME: shouldn't access all of the object pool, only the targets that are currently active
         foreach(GameObject targetToDisable in ObjectPool.pooledTargets){
-            targetToDisable.gameObject.SetActive(false);
+            if (gameObject.activeSelf)
+            {
+                targetToDisable.GetComponent<Target>().isHit = true;
+                targetToDisable.gameObject.SetActive(false);
+            }
         }
         
     }

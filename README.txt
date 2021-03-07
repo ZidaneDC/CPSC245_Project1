@@ -26,6 +26,8 @@ UI.cs
 3) Description of any known compile/runtime errors, or bugs
 a. The game restarts once a game over is hit and the restart button is clicked,
 however the game over canvas will not disappear.
+b.Bomb functionality is not yet complete, however the game will alert the player
+when a target flagged as a bomb appears.
 
 4.) References used to complete the assignment
 stackoverflow.com

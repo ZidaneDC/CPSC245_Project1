@@ -18,7 +18,7 @@ public class Target : MonoBehaviour
 */
 
     public string targetColor;
-    public int targetSpeed;
+    public float targetSpeed;
     public int targetValue;
     public bool isBomb; 
     public bool isHit; 
@@ -37,11 +37,11 @@ public class Target : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        levelLogic = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelLogic>();
+        
     }
 
     //SetTargetValues is a method to be called by level logic to change a targets properties based on level difficulty
-    public void SetTargetValues(string inputColor, int inputSpeed, int inputValue, bool inputIsBomb) 
+    public void SetTargetValues(string inputColor, float inputSpeed, int inputValue, bool inputIsBomb) 
     {
         targetColor = inputColor;
         targetSpeed = inputSpeed;
@@ -54,6 +54,7 @@ public class Target : MonoBehaviour
     private void OnMouseDown()
     {
         isHit = true;
-        levelLogic.Hit(this); 
+        Debug.Log("Target Hit!");
+        levelLogic.Hit(this.gameObject); 
     }
 }
