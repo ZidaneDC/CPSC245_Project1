@@ -1,3 +1,6 @@
+One late day is being used on this assignment, due 3/5/2021
+and being turned in on 3/6/2021.
+
 
  1.) Identifying Information
  a. Name: Zidane De Cantuaria
